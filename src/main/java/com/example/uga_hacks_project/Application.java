@@ -70,7 +70,10 @@ public class Application extends javafx.application.Application {
         this.stage = stage;
         this.stage.setTitle("Hello!");
         this.stage.setScene(scene);
+
+
         this.stage.show();
+
     }
 
     public static void main(String[] args) {
