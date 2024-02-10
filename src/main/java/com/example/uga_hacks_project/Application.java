@@ -10,6 +10,7 @@ package com.example.uga_hacks_project;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -76,20 +77,38 @@ public class Application extends javafx.application.Application {
     public void start(Stage stage) throws IOException {
 
         this.stage = stage;
-        this.stage.setTitle("Hello!");
+        this.stage.setTitle("SuperScan");
         this.stage.setScene(scene);
         this.root.setPadding(new Insets(3));
 
-        //Image defaultImg = new Image("");
+        Image defaultImg = new Image("file:resources/defaultImage1.png");
+        viewImg.setImage(defaultImg);
         this.viewImg.setFitWidth(100);
         this.viewImg.setFitHeight(100);
+
         this.searchHBox.getChildren().addAll(searchInput, searchButton);
         this.vbox1.getChildren().addAll(searchHBox, changeColor, changeSize);
         this.vbox2.getChildren().addAll(viewImg, displayQrUrl, copyUrl, copyImg);
         this.panels.getChildren().addAll(vbox1,vbox2);
         this.root.getChildren().add(panels);
-        this.scene2 = new Scene(root);
-        this.stage.setScene(scene2);
+
+        //this.changeColor.getItems().addAll()
+        this.changeSize.getItems().addAll(
+                "100x100",
+                "150x150",
+                "200x200",
+                "250x250",
+                "300x300",
+                "350x350"
+        );
+
+        //this.searchButton.setOnAction(e -> this.);
+        //this.copyUrl.setOnAction(e -> this.);
+        //this.copyImg.setOnAction(e -> this.);
+
+        this.scene = new Scene(root);
+        this.stage.sizeToScene();
+        this.stage.setScene(scene);
         this.stage.show();
     }
 
