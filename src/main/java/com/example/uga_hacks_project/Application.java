@@ -1,4 +1,4 @@
-// user enters link/specified serach
+// user enters link/specified search
 // shows what image will look like
 // can copy the link to use in web browser
 // search, has “.com”, “www” buttons for convenience
