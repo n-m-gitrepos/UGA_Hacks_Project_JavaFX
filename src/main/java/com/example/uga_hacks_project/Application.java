@@ -9,19 +9,18 @@ package com.example.uga_hacks_project;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.ComboBox;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.text.TextFlow;
@@ -33,11 +32,11 @@ public class Application extends javafx.application.Application {
 
     private Stage stage;
     private Scene scene;
+    private Label displayQrUrl;
     private String qrUrl;
     private Image qrImg;
     private ImageView viewImg;
     private VBox root;
-    private TextFlow displayQrUrl;
     private Button searchButton;
     private Button copyUrl;
     private Button copyImg;
@@ -51,27 +50,34 @@ public class Application extends javafx.application.Application {
     private VBox vbox1;
     private VBox vbox2;
     private HBox searchHBox;
-    private Scene scene2;
+
+    private Separator sepVert;
+    private Separator sepHoriz;
+    private ImageView superScanImgView;
 
     @Override
     public void init() {
-        this.root = new VBox();
+        this.root = new VBox(3);
         this.qrUrl = "";
         this.viewImg = new ImageView();
-        this.displayQrUrl = new TextFlow(new Text("Enter a website URL or a search result and the link to the QR code will appear here!"));
+        this.displayQrUrl = new Label("Enter a website URL or a search result and the link to the QR code will appear here!");
         this.searchButton = new Button("search");
         this.copyUrl = new Button("Copy the URL to clipboard");
-        this.copyImg = new Button("Copy image to the clipboard");
+        this.copyImg = new Button("Copy image to clipboard");
         this.searchInput = new TextField();
         this.changeColor = new ComboBox<Rectangle>();
         this.changeSize = new ComboBox<String>();
         this.codeSize = 100;
         this.b1 = new Button(".com");
         this.b2 = new Button("www.");
-        this.panels = new HBox();
-        this.vbox1 = new VBox();
-        this.vbox2 = new VBox();
-        this.searchHBox = new HBox();
+        this.panels = new HBox(3);
+        this.vbox1 = new VBox(3);
+        this.vbox2 = new VBox(3);
+        this.searchHBox = new HBox(3);
+        this.sepVert = new Separator();
+        this.sepHoriz = new Separator();
+        superScanImgView = new ImageView();
+        
     }
 
     @Override
@@ -81,17 +87,23 @@ public class Application extends javafx.application.Application {
         this.stage.setTitle("SuperScan");
         this.stage.setScene(scene);
         this.root.setPadding(new Insets(3));
+        HBox.setHgrow(this.searchInput, Priority.ALWAYS);
+        this.sepHoriz.setOrientation(Orientation.VERTICAL);
 
         Image defaultImg = new Image("file:resources/defaultImage1.png");
-        viewImg.setImage(defaultImg);
+        this.viewImg.setImage(defaultImg);
+        Image superScanImg = new Image("file:resources/superScanImg.jpg");
+        this.superScanImgView.setImage(superScanImg);
+        this.superScanImgView.setFitWidth(200);
+        this.superScanImgView.setFitHeight(200);
         this.viewImg.setFitWidth(100);
         this.viewImg.setFitHeight(100);
 
-        this.searchHBox.getChildren().addAll(searchInput, searchButton);
-        this.vbox1.getChildren().addAll(searchHBox, changeColor, changeSize);
+        this.searchHBox.getChildren().addAll(b1, b2, searchInput, searchButton);
+        this.vbox1.getChildren().addAll(changeColor, changeSize, superScanImgView);
         this.vbox2.getChildren().addAll(viewImg, displayQrUrl, copyUrl, copyImg);
-        this.panels.getChildren().addAll(vbox1,vbox2);
-        this.root.getChildren().add(panels);
+        this.panels.getChildren().addAll(vbox1, sepHoriz, vbox2);
+        this.root.getChildren().addAll(searchHBox, sepVert, panels);
 
         //this.changeColor.getItems().addAll()
         this.changeSize.getItems().addAll(
@@ -106,6 +118,8 @@ public class Application extends javafx.application.Application {
         //this.searchButton.setOnAction(e -> this.);
         //this.copyUrl.setOnAction(e -> this.);
         //this.copyImg.setOnAction(e -> this.);
+        //this.b1.setOnAction(e -> );
+        //this.b2.setOnAction(e -> );
 
         this.scene = new Scene(root);
         this.stage.sizeToScene();
