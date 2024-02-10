@@ -44,8 +44,8 @@ public class Application extends javafx.application.Application {
     private ComboBox<Rectangle> changeColor;
     private ComboBox<String> changeSize;
     private int codeSize; // for size dimensions
-    private Button b1; // ".com"
-    private Button b2; // "www."
+    private Button b1; // "www."
+    private Button b2; // ".com"
     private HBox panels;
     private VBox vbox1;
     private VBox vbox2;
@@ -68,8 +68,8 @@ public class Application extends javafx.application.Application {
         this.changeColor = new ComboBox<Rectangle>();
         this.changeSize = new ComboBox<String>();
         this.codeSize = 100;
-        this.b1 = new Button(".com");
-        this.b2 = new Button("www.");
+        this.b1 = new Button("www.");
+        this.b2 = new Button(".com");
         this.panels = new HBox(3);
         this.vbox1 = new VBox(3);
         this.vbox2 = new VBox(3);
@@ -89,6 +89,7 @@ public class Application extends javafx.application.Application {
         this.root.setPadding(new Insets(3));
         HBox.setHgrow(this.searchInput, Priority.ALWAYS);
         this.sepHoriz.setOrientation(Orientation.VERTICAL);
+        this.searchInput.setText("https://");
 
         Image defaultImg = new Image("file:resources/defaultImage1.png");
         this.viewImg.setImage(defaultImg);
@@ -118,8 +119,11 @@ public class Application extends javafx.application.Application {
         //this.searchButton.setOnAction(e -> this.);
         //this.copyUrl.setOnAction(e -> this.);
         //this.copyImg.setOnAction(e -> this.);
-        //this.b1.setOnAction(e -> );
-        //this.b2.setOnAction(e -> );
+
+        this.b1.setOnAction(e ->
+                this.searchInput.setText(searchInput.getText() + "www."));
+        this.b2.setOnAction(e ->
+                this.searchInput.setText(searchInput.getText() + ".com"));
 
         this.scene = new Scene(root);
         this.stage.sizeToScene();
