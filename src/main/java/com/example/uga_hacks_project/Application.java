@@ -8,6 +8,7 @@
 package com.example.uga_hacks_project;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -44,6 +45,10 @@ public class Application extends javafx.application.Application {
     private int codeSize; // for size dimensions
     private Button b1; // ".com"
     private Button b2; // "www."
+    private HBox panels;
+    private VBox vbox1;
+    private VBox vbox2;
+    private HBox searchHBox;
 
     @Override
     public void init() {
@@ -60,7 +65,10 @@ public class Application extends javafx.application.Application {
         this.codeSize = 100;
         this.b1 = new Button(".com");
         this.b2 = new Button("www.");
-
+        this.panels = new HBox();
+        this.vbox1 = new VBox();
+        this.vbox2 = new VBox();
+        this.searchHBox = new HBox();
     }
 
     @Override
@@ -70,6 +78,16 @@ public class Application extends javafx.application.Application {
         this.stage = stage;
         this.stage.setTitle("Hello!");
         this.stage.setScene(scene);
+        this.root.setPadding(new Insets(3));
+
+        //Image defaultImg = new Image("");
+        this.viewImg.setFitWidth(100);
+        this.viewImg.setFitHeight(100);
+        this.searchHBox.getChildren().addAll(searchInput, searchButton);
+        this.vbox1.getChildren().addAll(searchHBox, changeColor, changeSize);
+        this.vbox2.getChildren().addAll(viewImg, displayQrUrl, copyUrl, copyImg);
+        this.panels.getChildren().addAll(vbox1,vbox2);
+        this.root.getChildren().add(panels);
 
         this.stage.show();
     }
