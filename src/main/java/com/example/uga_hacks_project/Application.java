@@ -1,3 +1,10 @@
+// user enters link/specified serach
+// shows what image will look like
+// can copy the link to use in web browser
+// search, has “.com”, “www” buttons for convenience
+// dropdown menus for color and desired size
+// option to copy image or copy url link
+
 package com.example.uga_hacks_project;
 
 import javafx.fxml.FXMLLoader;
