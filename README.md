@@ -5,4 +5,5 @@ Project Details:
 
 API References Utilized:
   https://goqr.me/api/doc/create-qr-code/
+  
   JavaFX API Documentation
