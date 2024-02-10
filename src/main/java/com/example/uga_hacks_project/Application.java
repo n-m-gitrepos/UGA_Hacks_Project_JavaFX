@@ -77,7 +77,7 @@ public class Application extends javafx.application.Application {
         this.sepVert = new Separator();
         this.sepHoriz = new Separator();
         superScanImgView = new ImageView();
-        
+
     }
 
     @Override
