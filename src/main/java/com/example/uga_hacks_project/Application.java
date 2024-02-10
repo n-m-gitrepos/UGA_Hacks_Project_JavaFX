@@ -8,7 +8,9 @@
 package com.example.uga_hacks_project;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -45,6 +47,11 @@ public class Application extends javafx.application.Application {
     private int codeSize; // for size dimensions
     private Button b1; // ".com"
     private Button b2; // "www."
+    private HBox panels;
+    private VBox vbox1;
+    private VBox vbox2;
+    private HBox searchHBox;
+    private Scene scene2;
 
     @Override
     public void init() {
@@ -61,15 +68,47 @@ public class Application extends javafx.application.Application {
         this.codeSize = 100;
         this.b1 = new Button(".com");
         this.b2 = new Button("www.");
-
+        this.panels = new HBox();
+        this.vbox1 = new VBox();
+        this.vbox2 = new VBox();
+        this.searchHBox = new HBox();
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("hello-view.fxml"));
-        this.scene = new Scene(fxmlLoader.load(), 320, 240);
+
         this.stage = stage;
-        this.stage.setTitle("Hello!");
+        this.stage.setTitle("SuperScan");
+        this.stage.setScene(scene);
+        this.root.setPadding(new Insets(3));
+
+        Image defaultImg = new Image("file:resources/defaultImage1.png");
+        viewImg.setImage(defaultImg);
+        this.viewImg.setFitWidth(100);
+        this.viewImg.setFitHeight(100);
+
+        this.searchHBox.getChildren().addAll(searchInput, searchButton);
+        this.vbox1.getChildren().addAll(searchHBox, changeColor, changeSize);
+        this.vbox2.getChildren().addAll(viewImg, displayQrUrl, copyUrl, copyImg);
+        this.panels.getChildren().addAll(vbox1,vbox2);
+        this.root.getChildren().add(panels);
+
+        //this.changeColor.getItems().addAll()
+        this.changeSize.getItems().addAll(
+                "100x100",
+                "150x150",
+                "200x200",
+                "250x250",
+                "300x300",
+                "350x350"
+        );
+
+        //this.searchButton.setOnAction(e -> this.);
+        //this.copyUrl.setOnAction(e -> this.);
+        //this.copyImg.setOnAction(e -> this.);
+
+        this.scene = new Scene(root);
+        this.stage.sizeToScene();
         this.stage.setScene(scene);
 
 
