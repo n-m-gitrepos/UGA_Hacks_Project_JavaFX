@@ -49,6 +49,7 @@ public class Application extends javafx.application.Application {
     private VBox vbox1;
     private VBox vbox2;
     private HBox searchHBox;
+    private Scene scene2;
 
     @Override
     public void init() {
@@ -73,8 +74,7 @@ public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("hello-view.fxml"));
-        this.scene = new Scene(fxmlLoader.load(), 320, 240);
+
         this.stage = stage;
         this.stage.setTitle("Hello!");
         this.stage.setScene(scene);
@@ -88,7 +88,8 @@ public class Application extends javafx.application.Application {
         this.vbox2.getChildren().addAll(viewImg, displayQrUrl, copyUrl, copyImg);
         this.panels.getChildren().addAll(vbox1,vbox2);
         this.root.getChildren().add(panels);
-
+        this.scene2 = new Scene(root);
+        this.stage.setScene(scene2);
         this.stage.show();
     }
 
