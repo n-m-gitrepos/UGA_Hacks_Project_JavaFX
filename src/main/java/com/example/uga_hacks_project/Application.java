@@ -25,8 +25,17 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.text.TextFlow;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+
 import java.io.IOException;
-import com.example.uga_hacks_project.Api; 
 
 public class Application extends javafx.application.Application {
 
@@ -41,7 +50,8 @@ public class Application extends javafx.application.Application {
     private Button copyUrl;
     private Button copyImg;
     private TextField searchInput;
-    private ComboBox<Rectangle> changeColor;
+    private ColorPicker colorPicker;
+    private ColorPicker bgColorPicker;
     private ComboBox<String> changeSize;
     private int codeSize; // for size dimensions
     private Button b1; // "www."
@@ -50,10 +60,12 @@ public class Application extends javafx.application.Application {
     private VBox vbox1;
     private VBox vbox2;
     private HBox searchHBox;
-
     private Separator sepVert;
     private Separator sepHoriz;
     private ImageView superScanImgView;
+    private static String baseURL = "http://api.qrserver.com/v1/create-qr-code/";
+    private String color;
+    private String bgColor;
 
     @Override
     public void init() {
@@ -65,7 +77,7 @@ public class Application extends javafx.application.Application {
         this.copyUrl = new Button("Copy the URL to clipboard");
         this.copyImg = new Button("Copy image to clipboard");
         this.searchInput = new TextField();
-        this.changeColor = new ComboBox<Rectangle>();
+
         this.changeSize = new ComboBox<String>();
         this.codeSize = 100;
         this.b1 = new Button("www.");
@@ -76,8 +88,22 @@ public class Application extends javafx.application.Application {
         this.searchHBox = new HBox(3);
         this.sepVert = new Separator();
         this.sepHoriz = new Separator();
-        superScanImgView = new ImageView();
+        this.superScanImgView = new ImageView();
+        this.colorPicker = new ColorPicker();
+        this.color = "";
+        this.bgColorPicker = new ColorPicker();
+        this.bgColor = "";
+    }
 
+    boolean isValidURL(String url) throws MalformedURLException, URISyntaxException {
+        try {
+            new URL(url).toURI();
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        } catch (URISyntaxException e) {
+            return false;
+        }
     }
 
     @Override
@@ -100,8 +126,11 @@ public class Application extends javafx.application.Application {
         this.viewImg.setFitWidth(100);
         this.viewImg.setFitHeight(100);
 
+        this.copyImg.setDisable(true);
+        this.copyUrl.setDisable(true);
+
         this.searchHBox.getChildren().addAll(b1, b2, searchInput);
-        this.vbox1.getChildren().addAll(changeColor, changeSize, searchButton, superScanImgView);
+        this.vbox1.getChildren().addAll(colorPicker, bgColorPicker, changeSize, searchButton, superScanImgView);
         this.vbox2.getChildren().addAll(viewImg, displayQrUrl, copyUrl, copyImg);
         this.panels.getChildren().addAll(vbox1, sepHoriz, vbox2);
         this.root.getChildren().addAll(searchHBox, sepVert, panels);
@@ -116,16 +145,63 @@ public class Application extends javafx.application.Application {
                 "350x350"
         );
 
+        this.colorPicker.setOnAction(e -> {
+            Color c = colorPicker.getValue();
+            this.color = String.format("%s-%s-%s",
+                    ((int)c.getRed())*255,
+                    ((int)c.getGreen())*255,
+                    ((int)c.getBlue())*255);
+        });
+
+        this.bgColorPicker.setOnAction(e -> {
+            Color c = colorPicker.getValue();
+            this.bgColor = String.format("%s-%s-%s",
+                    ((int)c.getRed())*255,
+                    ((int)c.getGreen())*255,
+                    ((int)c.getBlue())*255);
+        });
+
+
         this.searchButton.setOnAction(e -> {
-            if (this.searchInput.getText().substring(0, 8).equals("https://") || this.searchInput.getText().substring(0, 7).equals("http://")) {
-                this.viewImg.setImage(new Image(this.searchInput.getText()));
+            try {
+                if (this.isValidURL(this.searchInput.getText())) {
+                    this.copyUrl.setDisable(false);
+                    this.copyImg.setDisable(false);
+                    String query = String.format("?data=%s&size=%s&color=%s&bgcolor=%s",
+                            this.searchInput.getText(),
+                            this.changeSize.getValue(),
+                            this.color,
+                            this.bgColor
+                    );
+                    String qrURI = baseURL + query;
+                    this.viewImg.setImage(new Image(qrURI));
+
+                } else {
+                    this.displayQrUrl.setText("Please enter a valid URL.");
+                }
+            } catch (MalformedURLException ex) {
+                this.displayQrUrl.setText("Please enter a valid URL.");
+            } catch (URISyntaxException ex) {
+                this.displayQrUrl.setText("Please enter a valid URL.");
             }
+
         });
 
         this.copyImg.setOnAction(e -> {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             ClipboardContent content = new ClipboardContent();
-            content.putImage(this.viewImg.getImage());
+
+            String imageUrl = this.searchInput.getText();
+            String targetPath = "resources/defaultImage1.png";
+
+            try (InputStream in = new URL(imageUrl).openStream()){
+                Files.copy(in, Path.of(targetPath), StandardCopyOption.REPLACE_EXISTING);
+            } catch (Exception exc) {
+                    exc.printStackTrace();
+            }
+
+            Image newImage = new Image("file:resources/defaultImage1.png");
+            content.putImage(newImage);
             clipboard.setContent(content);
         });
 
