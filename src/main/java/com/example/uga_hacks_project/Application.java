@@ -61,7 +61,7 @@ public class Application extends javafx.application.Application {
         this.qrUrl = "";
         this.viewImg = new ImageView();
         this.displayQrUrl = new Label("Enter a website URL or a search result and the link to the QR code will appear here!");
-        this.searchButton = new Button("search");
+        this.searchButton = new Button("Generate QR Code");
         this.copyUrl = new Button("Copy the URL to clipboard");
         this.copyImg = new Button("Copy image to clipboard");
         this.searchInput = new TextField();
@@ -100,8 +100,8 @@ public class Application extends javafx.application.Application {
         this.viewImg.setFitWidth(100);
         this.viewImg.setFitHeight(100);
 
-        this.searchHBox.getChildren().addAll(b1, b2, searchInput, searchButton);
-        this.vbox1.getChildren().addAll(changeColor, changeSize, superScanImgView);
+        this.searchHBox.getChildren().addAll(b1, b2, searchInput);
+        this.vbox1.getChildren().addAll(changeColor, changeSize, searchButton, superScanImgView);
         this.vbox2.getChildren().addAll(viewImg, displayQrUrl, copyUrl, copyImg);
         this.panels.getChildren().addAll(vbox1, sepHoriz, vbox2);
         this.root.getChildren().addAll(searchHBox, sepVert, panels);
@@ -119,6 +119,7 @@ public class Application extends javafx.application.Application {
         //this.searchButton.setOnAction(e -> this.);
         //this.copyUrl.setOnAction(e -> this.);
         //this.copyImg.setOnAction(e -> this.);
+
 
         this.b1.setOnAction(e ->
                 this.searchInput.setText(searchInput.getText() + "www."));
