@@ -40,3 +40,4 @@ build/
 ### Yatin ###
 *.log
 *.swp
+resources/downloadedfile.png
