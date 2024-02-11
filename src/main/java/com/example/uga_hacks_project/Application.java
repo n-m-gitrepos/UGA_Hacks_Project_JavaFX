@@ -53,6 +53,7 @@ public class Application extends javafx.application.Application {
     private Button searchButton;
     private Button copyUrl;
     private Button copyImg;
+    private Button saveImg;
     private TextField searchInput;
     private ColorPicker colorPicker;
     private ColorPicker bgColorPicker;
@@ -86,6 +87,7 @@ public class Application extends javafx.application.Application {
         this.searchButton = new Button("Generate QR Code");
         this.copyUrl = new Button("Copy the URL to clipboard");
         this.copyImg = new Button("Copy image to clipboard");
+        this.saveImg = new Button("Save image to your computer");
         this.searchInput = new TextField();
 
         this.changeSize = new ComboBox<String>();
@@ -142,6 +144,7 @@ public class Application extends javafx.application.Application {
         this.viewImg.setFitWidth(100);
         this.viewImg.setFitHeight(100);
         this.copyImg.setDisable(true);
+        this.saveImg.setDisable(true);
         this.copyUrl.setDisable(true);
         this.spacer.setPrefHeight(10);
         this.spacer2.setPrefHeight(10);
@@ -154,7 +157,7 @@ public class Application extends javafx.application.Application {
 
         this.searchHBox.getChildren().addAll(b1, b2, searchInput);
         this.vbox1.getChildren().addAll(colorLabel, colorPicker, spacer, bgColorLabel, bgColorPicker, spacer2, sizeLabel, changeSize, spacer3, searchButton, superScanImgView);
-        this.vbox2.getChildren().addAll(viewImg, displayQrUrl, copyUrl, copyImg);
+        this.vbox2.getChildren().addAll(viewImg, displayQrUrl, copyUrl, copyImg, saveImg);
         this.panels.getChildren().addAll(vbox1, sepHoriz, vbox2);
         this.root.getChildren().addAll(searchHBox, sepVert, panels);
 
@@ -191,6 +194,7 @@ public class Application extends javafx.application.Application {
                 if (this.isValidURL(this.searchInput.getText())) {
                     this.copyUrl.setDisable(false);
                     this.copyImg.setDisable(false);
+                    this.saveImg.setDisable(false);
                     String query = String.format("?data=%s&size=%s&color=%s&bgcolor=%s",
                             this.searchInput.getText(),
                             this.changeSize.getValue().substring(0,3),
@@ -229,6 +233,21 @@ public class Application extends javafx.application.Application {
             Image newImage = new Image("file:resources/new_image.png");
             content.putImage(newImage);
             clipboard.setContent(content);
+        });
+        
+        this.saveImg.setOnAction(e -> {
+
+            String imageUrl = this.searchInput.getText();
+            String targetPath = "resources/new_image.png";
+
+            try (InputStream in = new URL(imageUrl).openStream()){
+                Files.copy(in, Path.of(targetPath), StandardCopyOption.REPLACE_EXISTING);
+            } catch (Exception exc) {
+                    exc.printStackTrace();
+            }
+
+            this.displayQrUrl.setText("Image Saved to Device");
+            
         });
 
         this.copyUrl.setOnAction(e -> {
