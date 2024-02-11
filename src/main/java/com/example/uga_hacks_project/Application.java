@@ -115,9 +115,23 @@ public class Application extends javafx.application.Application {
                 "350x350"
         );
 
-        //this.searchButton.setOnAction(e -> this.);
-        //this.copyUrl.setOnAction(e -> this.);
-        //this.copyImg.setOnAction(e -> this.);
+        this.searchButton.setOnAction(e -> {
+            if (this.searchInput.getText().substring(0, 8).equals("https://") || this.searchInput.getText().substring(0, 7).equals("http://")) {
+                this.viewImg.setImage(new Image(this.searchInput.getText()));
+            }
+        });
+        this.copyImg.setOnAction(e -> {
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            content.putImage(this.viewImg.getImage());
+            clipboard.setContent(content);
+        });
+        this.copyUrl.setOnAction(e -> {
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            content.putString(this.searchInput.getText());
+            clipboard.setContent(content);
+        });
         //this.b1.setOnAction(e -> );
         //this.b2.setOnAction(e -> );
 
