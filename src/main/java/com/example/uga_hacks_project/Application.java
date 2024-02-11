@@ -218,6 +218,7 @@ public class Application extends javafx.application.Application {
                 this.searchInput.setText(searchInput.getText() + ".com"));
 
         this.scene = new Scene(root);
+
         this.stage.sizeToScene();
         this.stage.setScene(scene);
 
