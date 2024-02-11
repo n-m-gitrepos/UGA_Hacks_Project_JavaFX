@@ -8,6 +8,7 @@
 package com.example.uga_hacks_project;
 
 import javafx.fxml.FXMLLoader;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
@@ -37,6 +38,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import java.io.IOException;
@@ -47,6 +49,7 @@ public class Application extends javafx.application.Application {
     private Scene scene;
     private Label displayQrUrl;
     private String qrUrl;
+    private String qrURI;
     private Image qrImg;
     private ImageView viewImg;
     private VBox root;
@@ -201,7 +204,7 @@ public class Application extends javafx.application.Application {
                             this.color,
                             this.bgColor
                     );
-                    String qrURI = baseURL + query;
+                    qrURI = baseURL + query;
                     Image nI = new Image(qrURI);
                     this.viewImg.setFitHeight(Integer.parseInt(this.changeSize.getValue().substring(0,3)));
                     this.viewImg.setFitWidth(Integer.parseInt(this.changeSize.getValue().substring(0,3)));
@@ -222,15 +225,9 @@ public class Application extends javafx.application.Application {
             ClipboardContent content = new ClipboardContent();
 
             String imageUrl = this.searchInput.getText();
-            String targetPath = "resources/new_image.png";
 
-            try (InputStream in = new URL(imageUrl).openStream()){
-                Files.copy(in, Path.of(targetPath), StandardCopyOption.REPLACE_EXISTING);
-            } catch (Exception exc) {
-                    exc.printStackTrace();
-            }
-
-            Image newImage = new Image("file:resources/new_image.png");
+            runNow(() -> this.saveToComputer(qrURI));
+            Image newImage = new Image("file:resources/downloadedfile.png");
             content.putImage(newImage);
             clipboard.setContent(content);
         });
@@ -240,12 +237,7 @@ public class Application extends javafx.application.Application {
             String imageUrl = this.searchInput.getText();
             String targetPath = "resources/new_image.png";
 
-            try (InputStream in = new URL(imageUrl).openStream()){
-                Files.copy(in, Path.of(targetPath), StandardCopyOption.REPLACE_EXISTING);
-            } catch (Exception exc) {
-                    exc.printStackTrace();
-            }
-
+            runNow(() -> this.saveToComputer(qrURI));
             this.displayQrUrl.setText("Image Saved to Device");
             
         });
@@ -253,7 +245,7 @@ public class Application extends javafx.application.Application {
         this.copyUrl.setOnAction(e -> {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             ClipboardContent content = new ClipboardContent();
-            content.putString(this.searchInput.getText());
+            content.putString(qrURI);
             clipboard.setContent(content);
         });
 
@@ -273,5 +265,19 @@ public class Application extends javafx.application.Application {
 
     public static void main(String[] args) {
         launch();
+    }
+
+    private static void runNow(Runnable target) {
+        Thread thread = new Thread(target);
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    private void saveToComputer(String url) {
+        try (InputStream is = new URL(url).openStream()) {
+            Files.copy(is, Paths.get("resources/downloadedfile.png"), StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        } 
     }
 }
